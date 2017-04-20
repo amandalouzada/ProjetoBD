@@ -1,0 +1,17 @@
+.menu {
+  padding: 0px !important;
+  height: 900px;
+}
+
+.menu .collection {
+  border: none !important;
+}
+
+.menu .collection .collection-item {
+  border-bottom: none !important;
+}
+
+.conteudo {
+  height: 900px;
+  background-color: #282c34;
+}

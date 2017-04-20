@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Hello World!</title>
+  </head>
+  <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="node_modules/materialize-css/dist/css/materialize.min.css">
+<link rel="stylesheet" href="style.css">
+<body>
+      <div class="row">
+        <div class="col s2 menu">
+          <div class="collection">
+           <a href="#modal1" class="collection-item"  >Importar DBF</a>
+           <a href="#!" class="collection-item ">Exportar MongoDB</a>
+         </div>
+        </div>
+        <div class="col s10 conteudo">
+        </div>
+      </div>
+      <!-- Modal Trigger -->
+  <!-- Modal Structure -->
+  <div id="modal1" class="modal">
+    <div class="modal-content">
+      <h4>Arraste o arquivo para cá</h4>
+    </div>
+    <div class="modal-footer" id="holder">
+      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Ok</a>
+    </div>
+  </div>
+
+
+  <script>
+    var Parser = require('node-dbf');
+    var fs = require('fs');
+    const holder = document.getElementById('holder')
+    holder.ondragover = () => {
+      return false;
+    }
+    holder.ondragleave = holder.ondragend = () => {
+      return false;
+    }
+    holder.ondrop = (e) => {
+      console.log("Drop");
+      e.preventDefault()
+      var parser = new Parser(e.dataTransfer.files[0].path);
+
+      var dump = [];
+      filename = 'file.json';
+
+      parser
+      	.on('start', function(){
+      		console.log('Parsing ' + process.argv[1]);
+      	})
+      	.on('header', function(data){
+      		//console.log(data);
+      	})
+      	.on('record', function(data){
+      		//console.log(data);
+      		dump.push(data);
+      	})
+      	.on('end', function(){
+      		var dumpString = JSON.stringify(dump);
+      		var buffer = fs.writeFile(filename , dumpString, function(args){
+      			process.exit();
+      		})
+
+      	})
+
+        parser.parse();
+
+        return false;
+
+    }
+
+
+
+
+  </script>
+  </body>
+  <script>
+    // You can also require other files to run in this process
+    require('./renderer.js')
+  </script>
+  <script src="hammer.min.js"></script>
+  <script src="node_modules/materialize-css/dist/js/materialize.js"></script>
+  <script src="app.js"></script>
+</html>
